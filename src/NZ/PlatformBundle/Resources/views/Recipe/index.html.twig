@@ -1,0 +1,98 @@
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+
+			<div class="last-content-container">
+				<div class="ingredient-search-container">		
+					<label class="label-search-ingredient">Ingredients</label>		
+					{{ form_start(formSearchIngredient, {'attr': {'class': 'form-search-ingredient'}}) }}
+						<div class="form-group">
+							<div class="input-group select2-bootstrap-append">
+								<div class="select2-container select2-container-multi form-control select2" id="s2id_multi-append" >									
+									{{ form_widget(formSearchIngredient.test, {'attr': {'class': 's2id_multi-append'}}) }}							
+								</div>
+								<span class="input-group-btn">
+									{{ form_widget(formSearchIngredient.search, {'attr': {'class': 'input-btn btn btn-default glyphicon glyphicon-search'},'label':' '}) }}
+								</span>
+							</div>
+						</div>
+						
+					{{ form_widget(formSearchIngredient._token) }}
+					{{ form_end(formSearchIngredient) }}	
+							
+				</div>	
+						{% set i = 1 %}		
+						{% for key,recipesType in recipes %}					
+						<div class="basic-container recipetype">
+							<p class="basic-label">{{key}}</p>
+								{% for recipe in recipesType%}				
+								<div class="basic-label recipe-min-container" id="recipe_{{i}}">
+									<div class="picture-container">
+										<a href="{{ path('nz_platform_view', {'id': recipe.id}) }}">
+											<img class="miniature" src="{{ asset(recipe.picture.webPath) }}" alt="{{ recipe.picture.alt }}" />
+										</a>
+										<p class="recipe-time">{{ recipe.time }} mn</p>
+									</div>
+									<div class="recipe-name-container">
+										<a href="{{ path('nz_platform_view', {'id': recipe.id}) }}" class="recipe-name">{{ recipe.name }}</a>
+									</div>
+									<div>
+										<a href="{{ path('nz_platform_user_recipe', {'id': recipe.user.id})}}" class="recipe-name"><span class="recipe-user-name">{{ recipe.user.firstName }} {{ recipe.user.lastName }}</span></a>
+									</div>	
+									<div>
+									{% set diff = date(recipe.date).diff(date('now')) %}						
+									{% if diff.days > 730 %}<span class="recipe-time-elapsed">il y a {{ (diff.days/365)|round(0,'floor') }} ans</span>
+									{% elseif diff.days > 365 %}<span class="recipe-time-elapsed">il y a 1 an</span>
+									{% elseif diff.days > 30 %}<span class="recipe-time-elapsed">il y a {{ (diff.days/30)|round(0,'floor') }} mois</span>
+									{% elseif diff.days > 1 %}<span class="recipe-time-elapsed">il y a {{ diff.days }} jours</span>
+									{% elseif diff.days == 1 %}<span class="recipe-time-elapsed">il y a 1 jour</span>
+									{% elseif diff.days == 0 %}<span class=recipe-time-elapsed>Aujourd'hui</span>
+									{% endif %}
+									</div>													
+								</div>	
+								{% set i = i+1 %}					
+								{% endfor %}
+						</div>
+						{% endfor %}					
+			</div>		
+		
+			<script>
+				$(document).ready(function() {	
+					$(".s2id_multi-append").select2({
+						openOnEnter:true,
+						  multiple:true,
+						  tokenSeparators: [","],
+						  language:"fr",
+						  ajax: {
+						    url: "{{ path('ajax_multiple_ingredient') }}",
+						    dataType: 'json',
+						    delay: 5,
+						    data : function (term, page) {
+						        	return { name_startsWith : term, page: page };
+									},
+							results: function (data, page) { 
+							  			 return { results: data.results };	  			 
+									 },	
+						    cache: true
+						  },
+						  initSelection : function (element, callback) {
+						        var data = [];
+						        $(element.val().split(",")).each(function () {
+						            data.push({id: this, text: this});
+						        });
+						        callback(data);
+						    },
+						  formatSearching:null,
+						  formatInputTooShort:null,				 
+						  escapeMarkup: function (markup) { return markup; },
+						  minimumInputLength: 1,
+						  placeholder: "Rechercher des recettes selon vos ingredients disponibles",
+						  			  
+					});
+				});
+
+				$(".container").attr('class', 'index-container');
+							
+			</script>		
+
+{% endblock %}

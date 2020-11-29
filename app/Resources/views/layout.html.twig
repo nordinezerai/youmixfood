@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-signin-client_id" content="24040008946-esenlsmrju0ahnn89nl7h1am5pvkuco0.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="profile email">
+  <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+  <link rel="shortcut icon" type="image/x-icon" href="www.youmixfood.com/web/bundles/nzplatform/css/images/YouMixFood-icon.png" />
+  <link rel="apple-touch-icon" href="http://www.youmixfood.com/css/images/YouMixFood-logo-apple.png" />
+  <title>{% block title %}YouMixFood - beta{% endblock %}</title>
+  {% stylesheets filter='cssrewrite' 
+  				'@NZPlatformBundle/Resources/public/css/bootstrap.min.css' 
+  				'@NZPlatformBundle/Resources/public/css/layoutstyle.css'
+  				'@NZPlatformBundle/Resources/public/css/select2.css'
+  				'@NZPlatformBundle/Resources/public/css/jquery-ui.min.css'
+  				'@NZPlatformBundle/Resources/public/css/select2-bootstrap.css'	%}
+	  <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+  {% endstylesheets %}	
+  {% javascripts '@NZPlatformBundle/Resources/public/js/jquery-1.12.1.min.js'
+  				 '@NZPlatformBundle/Resources/public/js/jquery-ui.min.js'
+  				 '@NZPlatformBundle/Resources/public/js/select2.min.js'
+				 '@NZPlatformBundle/Resources/public/js/select2_locale_fr.js'
+  				 '@NZPlatformBundle/Resources/public/js/bootstrap.min.js' 
+  				 '@NZPlatformBundle/Resources/public/js/jquery.collection.js'   %}
+  	<script type="text/javascript" src="{{ asset_url }}"></script>	
+  {% endjavascripts %}
+  
+</head>
+<body>
+	<div id="wrap">
+		
+		<!-- Header -->
+		
+		<div class="jumbotron">
+			<div class="header-container">
+				<div class="top-header-container">
+					<div class="element-top-header-container">
+						<div class="logo-container">
+							<a href="{{ path('nz_platform_home') }}" class="logo-link">	
+								<span class="logo">
+								</span>
+							</a>
+						</div>
+						<div class="user-element-container">
+													    						   
+								{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+									<a href="{{ path('nz_platform_add') }}" class="add-recipe-link">
+										<span class="ymf-button">Ajouter une recette</span>
+									</a>
+									<a href="{{ path('fos_user_security_logout') }}" class="logout-link">
+								    	<span class="logout-button">Déconnexion</span>
+								    </a>
+								    <a href="https://plus.google.com/u/0/{{ app.user.username }}" class="user_profil">
+								    	<span class="user_button">
+								    		<img class="user_picture" src="{{ app.user.picture }}">
+								    	</span>
+								    </a>
+								{% else %}
+								    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" class="login-link">
+										<span class="login-button">Connexion</span>
+									</a>
+								{% endif %}						
+						</div>
+						<div class="search-content">
+							{{ form_start(formSearchRecipe, {'attr': {'class': 'form-search-recipe'}}) }}							
+								{{ form_widget(formSearchRecipe.search, {'attr': {'class': 'recipe-search-button btn btn-default glyphicon glyphicon-search'},'label':' '}) }}								
+								<div class="recipe-search-bar-container">
+									{{ form_widget(formSearchRecipe.name, {'attr': {'class': 'recipe-search-bar', 'placeholder':'Rechercher des recettes de cuisine'}}) }}
+								</div>	
+							{{ form_widget(formSearchRecipe._token) }}							
+	  						{{ form_end(formSearchRecipe) }}					
+						</div>
+					</div>
+				</div>				
+				<div class="nav-container">
+					<a href="{{ path('nz_platform_home') }}" class="link-nav"> <span>Accueil</span></a>
+					{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}<a href="{{ path('nz_platform_user_recipe', {'id': app.user.id})}}" class="link-nav"> <span>Vos recettes</span></a>
+					{% else %}<a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" class="link-nav"> <span>Vos recettes</span></a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		
+		<!-- Content -->
+		<div class="container">
+			{% block body %}
+	        {% endblock %}
+        </div>
+        
+    </div>
+        
+		<!-- Footer -->
+	
+	<div class="footer">
+		<div class="jumbotron">
+			<div class="footer-container">
+				<div class="footer-main">
+					<a href="{{ path('nz_platform_home') }}" class="logo-link">	
+						<span class="logo">
+						</span>
+					</a>
+				</div>
+				<div class="footer-link">
+					<div class="footer-link-primary">
+						<a href="{{ path('nz_platform_about') }}" class="link-footer">À propos</a>
+					</div>
+					<div class="footer-link-secondary">
+					<a href="{{ path('nz_platform_terms') }}" class="link-footer">Conditions d'utilisation</a>
+					<span class="link-footer">© 2020 YouMixFood</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		$('.recipe-search-bar').autocomplete({
+		    source : function(requete, response){
+			$.ajax({
+		            url : '{{ path('ajax_recipe') }}', // on appelle le script JSON
+		            dataType : 'json',
+		            data : {
+		                name_startsWith : requete.term,
+		                maxRows : 10
+		            },	            
+		            success : function(data){
+		            	response( $.map( data, function( item ) {
+		            	    return (item.label)            	    
+		            	}));
+		            }	            
+		        });
+		    }
+		});	
+	</script>	
+	
+</body>
+</html>

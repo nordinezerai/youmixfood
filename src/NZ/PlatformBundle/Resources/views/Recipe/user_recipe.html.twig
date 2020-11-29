@@ -1,0 +1,54 @@
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+			<script type="text/javascript">
+				$('.container').css('width','750px');
+
+			</script>
+			<div class="last-content-container">			
+					{% for recipe in recipes %}					
+					<div class="basic-container recipes-results">
+							<div class="picture-container">
+								<img class="miniature" src="{{ asset(recipe.picture.webPath) }}" alt="{{ recipe.picture.alt }}" />
+								<p class="recipe-time">{{ recipe.time }} mn</p>
+							</div>
+							<div class="info-recipe">
+								<div class="recipe-name-container">
+									<a href="{{ path('nz_platform_view', {'id': recipe.id}) }}" class="recipe-name">{{ recipe.name }}</a>
+								</div>
+								<div>
+									<a href="{{ path('nz_platform_user_recipe', {'id': recipe.user.id, 'page' : 1})}}" class="recipe-name"><span class="recipe-user-name">{{ recipe.user.firstName }} {{ recipe.user.lastName }}</span></a>
+								</div>
+								<div>
+									{% set diff = date(recipe.date).diff(date('now')) %}						
+									{% if diff.days > 730 %}<span class="recipe-time-elapsed">il y a {{ (diff.days/365)|round(0,'floor') }} ans</span>
+									{% elseif diff.days > 365 %}<span class="recipe-time-elapsed">il y a 1 an</span>
+									{% elseif diff.days > 30 %}<span class="recipe-time-elapsed">il y a {{ (diff.days/30)|round(0,'floor') }} mois</span>
+									{% elseif diff.days > 1 %}<span class="recipe-time-elapsed">il y a {{ diff.days }} jours</span>
+									{% elseif diff.days == 1 %}<span class="recipe-time-elapsed">il y a 1 jour</span>
+									{% endif %}
+								</div>
+								<div>
+									<span class="recipe-description">{{ recipe.description }}</span>
+								</div>
+							</div>																				
+					</div>	
+					{% else %} <div class="basic-container"><p class="basic-label">Vous n'avez aucune recette</p></div>			
+					{% endfor %}
+					
+					{% if nbPages > 1%}
+						<div class="basic-container" style="text-align:center;">
+							<ul class="pagination" style="margin:0;">
+		 						 {% for p in range(1, nbPages) %}
+		    					<li{% if p == page %} class="active"{% endif %}>
+		      						<a href="{{ path('nz_platform_user_recipe', {'id': id, 'page': p}) }}">{{ p }}</a>
+		    					</li>
+		  						{% endfor %}
+							</ul>
+						</div>
+					{% endif %}
+			</div>		
+			<script>
+				$('.picture-container').css('margin-right','10px').css('display','inline-block');
+			</script>		
+{% endblock %}

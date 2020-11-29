@@ -1,0 +1,197 @@
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+	<div class="md-content-container">
+		<div class="basic-container">
+			<div>
+				{% if recipe.video.url is defined%}<a href="" class="btn-play"></a>{%  endif %}
+				<img class="picture" src="{{ asset(recipe.picture.webPath) }}" alt="{{ recipe.picture.alt }}" />
+				{% if recipe.video.url is defined%}
+					{% if recipe.video.url starts with 'https://www.youtube.com/embed/' 
+					   or recipe.video.url starts with '//www.dailymotion.com/embed/video/'
+					   or recipe.video.url starts with 'https://player.vimeo.com/video/'
+					   or recipe.video.url starts with '//rutube.ru/play/embed/'%}
+					<iframe class="embed-view" width="714" height="484" src="{{recipe.video.url}}" frameborder="0" allowfullscreen></iframe>
+					{% else %}Lien video : {{recipe.video.url}}
+					{%  endif %}
+				{%  endif %}	
+			
+				<div class="element-recipe">
+					{% set listIngredient,listUstensile,listAppareil = [],[],[] %}
+					
+					<p class="basic-label ing" style="margin-bottom: -7px;">Ingredients</p>
+					<h4>			
+					{% for operation in recipe.operations%}
+						{% for etap in operation.etape %}					
+							{% if etap.typeEtape == 'Ingredient' %}
+							{% if etap.ingredient not in listIngredient %}
+								{% set quantityIngredient = 0 %}
+								{% for operation in recipe.operations %} 
+									{% for etap2 in operation.etape %} 
+									{% if etap.ingredient == etap2.ingredient %}
+										{% set quantityIngredient = quantityIngredient + etap2.quantity %}
+									{% endif %}
+									{% endfor %}
+								{% endfor %}
+								{% set listIngredient = listIngredient|merge([etap.ingredient]) %}																		
+								<span class="label-ingredient-list label label-warning">{{ quantityIngredient }} {{ etap.umQuantity }}</span>
+								<span class="label-ingredient-list label label-warning"> {{ etap.ingredient.name }}</span>			
+							{% endif %}
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+					</h4>
+					
+					<p class="basic-label ust" style="margin-bottom: -7px;">Ustensiles</p>
+					<h4>
+					{% for operation in recipe.operations%}
+						{% for etap in operation.etape %}
+							{% if etap.typeEtape == 'Ustensile' %}
+							{% if  etap.ustensile not in listUstensile %}
+							{% set listUstensile = listUstensile|merge([etap.ustensile]) %}
+								<span class="label-ustensile-list label label-primary">{{ etap.ustensile.name }}</span>
+							{% endif %}
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+					</h4>
+					
+					<p class="basic-label app" style="margin-bottom: -7px;">Appareils</p>
+					<h4>
+					{% for operation in recipe.operations%}
+						{% for etap in operation.etape %}
+							{% if etap.typeEtape == 'Appareil' %}
+							{% if  etap.appareil not in listAppareil %}
+							{% set listAppareil = listAppareil|merge([etap.appareil]) %}
+								<span class="label-appareil-list label label-default">{{ etap.appareil.name }}</span>
+							{% endif %}
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+					</h4>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<div class="md-content-container">
+		<div class="basic-container">
+			<div>
+				<span class="recipe-name-view">{{ recipe.name }} - {{ recipe.time }} mn - {{ recipe.personNumber }}{% if recipe.personNumber > 1 %} personnes{% else %} personne{% endif %}</span>
+			</div>
+			{% set i = 1 %}
+			{% for operation in recipe.operations %}
+			<div class="operation-container">
+					
+				<h3 class="operation">	
+				<span class="label-count-operation label label-info">{{ i }}</span> 
+				{% set i = i + 1 %}			
+				{% for etap in operation.etape %}
+					{% if etap.typeEtape == 'Ingredient' %}<span class="label-ingredient label label-warning">{{ etap.quantity }} {{ etap.umQuantity }}</span>
+															  <span class="label-ingredient label label-warning">{{ etap.ingredient.name }}</span>
+					{% elseif etap.typeEtape == 'Appareil' %}<span class="label-appareil label label-default">{{ etap.power }} {{ etap.umPower }}</span>
+															  <span class="label-appareil label label-default">{{ etap.appareil.name }}</span>																 
+					{% elseif etap.typeEtape == 'Ustensile' %}<span class="label-ustensile label label-primary">{{ etap.ustensile.name }}</span>
+					{% elseif etap.typeEtape == 'Action' %}<span class="label-action label label-danger">{{ etap.action.name }}</span>
+					{% endif %}
+				{% endfor %}					
+				</h3>
+				<div class="element-etape">
+					{% if operation.description is not null%}<span class='sdv'><textarea class="description-view" disabled>{{ operation.description }}</textarea></span><a href="" class="btn-description"></a>{%  endif %}
+					{% if operation.gif.webPath is defined%}<span class='sgv'><img class="gif-view" src="{{ asset(operation.gif.webPath) }}" alt="{{ operation.gif.alt }}" /></span><a href="" class="btn-gif"></a>{%  endif %}				
+				</div>								
+			</div>			
+			{% endfor %}
+		</div>
+	</div>
+	
+	<div class="md-content-container">
+		<div class="basic-container">
+			<div class="info-recipe-view">
+				<a href="https://plus.google.com/u/0/{{ recipe.user.username }}" class="user_profil">
+					<span class="recipe_user_button">
+						<img class="userpicture-view" src="{{ recipe.user.picture }}">
+					</span>
+				</a>
+			
+				<p class="username-view"><a href="{{ path('nz_platform_user_recipe', {'id': recipe.user.id})}}" class="recipe-name"><span class="username">{{ recipe.user.firstName }} {{ recipe.user.lastName }}</span></a></p>
+				<p class="date-view">Ajoutée le {{ recipe.date|date("d/m/Y") }}</p>
+				<p><span class="type-view">Catégorie : </span>{{ recipe.type }}</p>
+				{% if recipe.description is not null%}
+				<p class="recipe-description-view">{{ recipe.description }}</p>
+				{% endif %}
+			</div>
+			{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+				{% if app.user.username==recipe.user.username%}<a href="{{ path('nz_platform_delete', {'id': recipe.id}) }}" class="ymf-button btn-delete">Supprimer</a> <a href="{{ path('nz_platform_edit', {'id': recipe.id}) }}" class="ymf-button btn-edit">Modifier</a>{%  endif %}			
+			{% endif %} 
+		</div>
+	</div>
+	
+	<script src="https://apis.google.com/js/plusone.js" gapi_processed="true">
+	</script>	
+	
+	<div class="comments-box">	
+		<div id="comments"></div>
+	</div>
+	<script type="text/javascript">	
+				
+    	gapi.comments.render('comments', {
+    	    href: window.location,
+    	    width: 750,
+    	    first_party_property: 'BLOGGER',
+    		view_type: 'FILTERED_POSTMOD'
+    	});
+    	
+		$('.btn-play').click(function(){
+			if( $('.embed-view').css("display") == 'none'){ $('.embed-view').css("display","inline-block"); $('.picture').css("display","none");$('.btn-play').css("background-image","url('../../bundles/nzplatform/css/images/picture_orange.png')")}
+			else{$('.embed-view').css("display","none"); $('.picture').css("display","inline-block");$('.btn-play').css("background-image","url('../../bundles/nzplatform/css/images/movie_play_orange.png')");}
+			return false;
+		});
+
+		$('.btn-description').click(function(){
+			if( $(this).parent().children('.sdv').children('.description-view').css("display") == 'none'){$(this).parent().children('.sdv').children('.description-view').css("display","inline-block");}			
+			else{$(this).parent().children('.sdv').children('.description-view').css("display","none");}
+			return false;
+		});
+
+		$('.btn-gif').click(function(){
+			if( $(this).parent().children('.sgv').children('.gif-view').css("display") == 'none'){$(this).parent().children('.sgv').children('.gif-view').css("display","inline-block");}			
+			else{$(this).parent().children('.sgv').children('.gif-view').css("display","none");}
+			return false;
+		});
+		
+		$('.sdv').click(function(){
+			$(this).children('.description-view').css("display","none");
+		});
+
+		$('.sgv').click(function(){
+			$(this).children('.gif-view').css("display","none");
+		});
+
+		$('.btn-description').focusout(function(){
+			$(this).parent().children('.sdv').children('.description-view').css("display","none");
+		});
+
+		$('.btn-gif').focusout(function(){
+			$(this).parent().children('.sgv').children('.gif-view').css("display","none");
+		});
+
+		$( document ).ready(function() {
+			
+			var x = document.getElementsByClassName('label-ingredient-list')
+			if(!x.length > 0){
+				$('.ing').css("display","none");
+			};
+			var y = document.getElementsByClassName('label-ustensile-list')
+			if(!y.length > 0){
+				$('.ust').css("display","none");
+			};
+			var z = document.getElementsByClassName('label-appareil-list')
+			if(!z.length > 0){
+				$('.app').css("display","none");
+			};
+		});
+		
+	</script>			
+{% endblock %}

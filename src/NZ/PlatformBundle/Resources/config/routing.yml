@@ -1,0 +1,70 @@
+nz_platform_home:
+    path:     /
+    defaults: { _controller: "NZPlatformBundle:Recipe:index" }
+    
+nz_platform_add:
+    path:     /add
+    defaults: { _controller: "NZPlatformBundle:Recipe:add" }
+    
+nz_platform_user_recipe:
+    path:     /user_recipe/{id}/{page}
+    defaults: { _controller: "NZPlatformBundle:Recipe:userRecipe" , page: 1}
+    requirements:
+        id: \d+
+        page: \d*
+
+nz_platform_result:
+    path:     /result/{type}/{dataForm}/{page}
+    defaults: { _controller: "NZPlatformBundle:Recipe:result" , page: 1}      
+    requirements:
+        page: \d*
+
+nz_platform_view:
+    path:     /view/{id}
+    defaults: { _controller: "NZPlatformBundle:Recipe:view"} 
+    requirements:
+        id: \d+
+        
+nz_platform_edit:
+    path:     /edit/{id}
+    defaults: { _controller: "NZPlatformBundle:Recipe:edit" }
+    requirements:
+        id: \d+
+    
+nz_platform_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "NZPlatformBundle:Recipe:delete" } 
+    requirements:
+        id: \d+   
+        
+nz_platform_about:
+    path:     /about
+    defaults: { _controller: "NZPlatformBundle:Recipe:about" }
+
+nz_platform_terms:  
+    path:     /terms
+    defaults: { _controller: "NZPlatformBundle:Recipe:terms" }  
+    
+ajax_recipe:
+    defaults: { _controller: "NZPlatformBundle:Ajax:ajaxRecipe" }
+    pattern:  /ajax_recipe
+    
+ajax_ingredient:
+    defaults: { _controller: "NZPlatformBundle:Ajax:ajaxIngredient" }
+    pattern:  /ajax_ingredient
+
+ajax_appareil:
+    defaults: { _controller: "NZPlatformBundle:Ajax:ajaxAppareil" }
+    pattern:  /ajax_appareil
+    
+ajax_ustensile:
+    defaults: { _controller: "NZPlatformBundle:Ajax:ajaxUstensile" }
+    pattern:  /ajax_ustensile
+
+ajax_action:
+    defaults: { _controller: "NZPlatformBundle:Ajax:ajaxAction" }
+    pattern:  /ajax_action
+
+ajax_multiple_ingredient:
+    defaults: { _controller: "NZPlatformBundle:Ajax:ajaxMultipleIngredient" }
+    pattern:  /ajax_multiple_ingredient

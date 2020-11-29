@@ -1,0 +1,213 @@
+{% block EtapeType_label %}{% endblock %}
+{% block EtapeType_errors %}{% endblock %}
+
+{% block EtapeType_widget %}
+    
+        <div class="etape col-md-2 text-center">	
+        	<div class="etape-list-input col-md-10">
+	        	{{ form_widget(form.typeEtape)}}
+	            {{ form_widget(form.ingredient.name, {'attr': {'class': 'ingredient', 'placeholder': 'Entrez un ingredient'}})}}
+	            {{ form_widget(form.action.name, {'attr': {'class': 'action', 'placeholder': 'Entrez une action'}})}}
+	            {{ form_widget(form.appareil.name, {'attr': {'class': 'appareil', 'placeholder': 'Entrez un appareil'}})}}
+	            {{ form_widget(form.ustensile.name, {'attr': {'class': 'ustensile', 'placeholder': 'Entrez un ustensile'}})}}
+	            {{ form_widget(form.quantity, {'attr': {'class': 'quantity', 'placeholder': 'Quantité'}})}}
+	            {{ form_widget(form.power, {'attr': {'class': 'power', 'placeholder': 'Puissance'}})}}
+	            {{ form_widget(form.um_quantity, {'attr': {'class': 'um_quantity', 'placeholder': 'Unité'}})}}
+	            {{ form_widget(form.um_power, {'attr': {'class': 'um_power', 'placeholder': 'Unité'}})}}
+	            {{ form_widget(form.time, {'attr': {'class': 'time', 'placeholder': 'Minute'}})}}
+			</div>
+			<div class="list-button-child-collection col-md-1">
+	            <a href="#" class="collection-up btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a>
+	            <a href="#" class="collection-down btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span></a>
+	  
+	            <a href="#" class="collection-remove btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+	            <a href="#" class="collection-add btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span></a>
+	      
+	            <a href="#" class="collection-duplicate btn btn-default"><span class="glyphicon glyphicon-th-large"></span></a>
+            </div>
+        </div>
+        
+        <script type="text/javascript">			
+	    		                   		        	
+			        $(':input.select').change(function() {	
+			        	$(this).parent().children('.time').prop("required", false);	        			        	
+			        	switch ($(this).find('option:selected').text()) {			        	
+			        	case 'Choisissez une étape':
+			        		$(this).parent().children('.ingredient').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.appareil').prop("required", false).css("display","none").val("");	    	
+				        	$(this).parent().children('.quantity').prop("required", false).css("display","none").val("");		        	
+				        	$(this).parent().children('.um_quantity').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.power').prop("required", false).css("display","none").val("");	
+				        	$(this).parent().children('.um_power').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.ustensile').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.action').prop("required", false).css("display","none").val(""); 
+				        	$(this).parent().children('.time').css("display","none").val("");
+				        	break; 
+				        case 'Ingredient':				        
+				        	$(this).parent().children('.ingredient').prop("required", true).css("display","inline-block");
+				        	$(this).parent().children('.appareil').prop("required", false).css("display","none").val("");	    	
+				        	$(this).parent().children('.quantity').prop("required", true).css("display","inline-block");		        	
+				        	$(this).parent().children('.um_quantity').prop("required", true).css("display","inline-block");
+				        	$(this).parent().children('.power').prop("required", false).css("display","none").val("");	
+				        	$(this).parent().children('.um_power').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.ustensile').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.action').prop("required", false).css("display","none").val(""); 
+				        	$(this).parent().children('.time').css("display","none").val("");  		        	
+				            break;
+				        case 'Appareil': 
+				        	$(this).parent().children('.ingredient').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.appareil').prop("required", true).css("display","inline-block");	    	
+				        	$(this).parent().children('.quantity').prop("required", false).css("display","none").val("");		        	
+				        	$(this).parent().children('.um_quantity').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.power').prop("required", true).css("display","inline-block");	
+				        	$(this).parent().children('.um_power').prop("required", true).css("display","inline-block");
+				        	$(this).parent().children('.ustensile').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.action').prop("required", false).css("display","none").val(""); 
+				        	$(this).parent().children('.time').css("display","none").val(""); 
+				            break;
+				        case 'Ustensile':		        	
+				        	$(this).parent().children('.ingredient').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.appareil').prop("required", false).css("display","none").val("");	    	
+				        	$(this).parent().children('.quantity').prop("required", false).css("display","none").val("");		        	
+				        	$(this).parent().children('.um_quantity').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.power').prop("required", false).css("display","none").val("");	
+				        	$(this).parent().children('.um_power').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.ustensile').prop("required", true).css("display","inline-block");
+				        	$(this).parent().children('.action').prop("required", false).css("display","none").val(""); 
+				        	$(this).parent().children('.time').css("display","none").val(""); 	
+				            break;
+				        case 'Action':		        	
+				        	$(this).parent().children('.ingredient').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.appareil').prop("required", false).css("display","none").val("");	    					       	    	
+				        	$(this).parent().children('.quantity').prop("required", false).css("display","none").val("");		        	
+				        	$(this).parent().children('.um_quantity').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.power').prop("required", false).css("display","none").val("");	
+				        	$(this).parent().children('.um_power').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.ustensile').prop("required", false).css("display","none").val("");
+				        	$(this).parent().children('.action').prop("required", true).css("display","inline-block"); 
+				        	$(this).parent().children('.time').css("display","inline-block");       
+			        }});
+		        
+	        	
+	        	
+				$(':input.ingredient').autocomplete({
+		    	    source : function(requete, response){ // les deux arguments représentent les données nécessaires au plugin
+		    		$.ajax({
+		    	            url : '{{ path('ajax_ingredient') }}', // on appelle le script JSON
+		    	            dataType : 'json', // on spécifie bien que le type de données est en JSON
+		    	            data : {
+		    	                name_startsWith : requete.term, // on donne la chaîne de caractère tapée dans le champ de recherche
+		    	                maxRows : 10
+		    	            },	            
+		    	            success : function(data){
+		    	            	response( $.map( data, function( item ) {
+		    	            	    return (item.label)            	    
+		    	            	}));
+		    	            }	            
+		    	        });
+		    	    }
+		    	});	
+
+				$(':input.appareil').autocomplete({
+		    	    source : function(requete, response){ // les deux arguments représentent les données nécessaires au plugin
+		    		$.ajax({
+		    	            url : '{{ path('ajax_appareil') }}', // on appelle le script JSON
+		    	            dataType : 'json', // on spécifie bien que le type de données est en JSON
+		    	            data : {
+		    	                name_startsWith : requete.term, // on donne la chaîne de caractère tapée dans le champ de recherche
+		    	                maxRows : 10
+		    	            },	            
+		    	            success : function(data){
+		    	            	response( $.map( data, function( item ) {
+		    	            	    return (item.label)            	    
+		    	            	}));
+		    	            }	            
+		    	        });
+		    	    }
+		    	});	
+
+				$(':input.action').autocomplete({
+		    	    source : function(requete, response){ // les deux arguments représentent les données nécessaires au plugin
+		    		$.ajax({
+		    	            url : '{{ path('ajax_action') }}', // on appelle le script JSON
+		    	            dataType : 'json', // on spécifie bien que le type de données est en JSON
+		    	            data : {
+		    	                name_startsWith : requete.term, // on donne la chaîne de caractère tapée dans le champ de recherche
+		    	                maxRows : 10
+		    	            },	            
+		    	            success : function(data){
+		    	            	response( $.map( data, function( item ) {
+		    	            	    return (item.label)            	    
+		    	            	}));
+		    	            }	            
+		    	        });
+		    	    }
+		    	});
+
+				$(':input.ustensile').autocomplete({
+		    	    source : function(requete, response){ // les deux arguments représentent les données nécessaires au plugin
+		    		$.ajax({
+		    	            url : '{{ path('ajax_ustensile') }}', // on appelle le script JSON
+		    	            dataType : 'json', // on spécifie bien que le type de données est en JSON
+		    	            data : {
+		    	                name_startsWith : requete.term, // on donne la chaîne de caractère tapée dans le champ de recherche
+		    	                maxRows : 10
+		    	            },	            
+		    	            success : function(data){
+		    	            	response( $.map( data, function( item ) {
+		    	            	    return (item.label)            	    
+		    	            	}));
+		    	            }	            
+		    	        });
+		    	    }
+		    	});	    			    						
+        </script>   
+
+{% endblock %}
+
+{% block OperationType_label %}{% endblock %}
+{% block OperationType_errors %}{% endblock %}
+
+{% block OperationType_widget %}   
+        <div class="row etape-collection-container" >
+            {{ form_widget(form.etape)}}
+			<div class="element-operation-container text-center col-md-12">
+				{{ form_widget(form.description)}}
+				<div class="input-gif-container col-md-2"> 
+		        {{ form_widget(form.gif.file, {'attr': {'class': 'input-gif hidden', 'accept':'image/gif'}})}}
+		        <a href="" class="input-gif-trigger" onClick="clickInputGif(this)">+ Gif</a>		         
+		        </div>
+		        <img class="gif col-md-4" src="" style="display:none;" />  
+			</div>
+        </div> 
+		<script type="text/javascript">
+			document.querySelector("html").classList.add('js');
+	
+	        var gifInput  = document.querySelector( ".input-gif" ),  
+	            gifButton     = document.querySelector( ".input-gif-trigger" );        	
+	              
+	        gifButton.addEventListener( "keydown", function( event ) {  
+	            if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+	            	gifInput.focus();  
+	            }  
+	        });
+	        
+	        $('.input-gif-trigger').click(function(){
+		        return false;
+		    });
+		    
+	        function clickInputGif(a){
+				$(a).parent().children(".input-gif").click();
+		    }
+	        
+	        $('.input-gif').change( function(event) {
+	            if(event.target.files[0] != null){
+	        		var tmppath = URL.createObjectURL(event.target.files[0]);
+	        		$(this).parent().parent().children(".gif").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+	            }	
+	            else{$(this).parent().parent().children(".gif").css("display","none");}    
+
+	        });
+     
+		</script>
+{% endblock %}

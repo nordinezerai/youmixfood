@@ -1,0 +1,241 @@
+{%
+     form_theme formRecipe
+         'NZPlatformBundle:Recipe:jquery.collection.html.twig'
+         'NZPlatformBundle:Recipe:advanced-theme.html.twig'
+%}
+	{{ form_start(formRecipe, {'attr': {'class': 'form-horizontal'}}) }}
+	{{ form_errors(formRecipe) }}
+	<div class="sm-content-container">
+		<div class="basic-container">
+			<div class="form-group text-center">
+		      {{ form_label(formRecipe.name, "Nom", {'label_attr': {'class': ''}}) }}
+		      {{ form_errors(formRecipe.name) }}
+		      <div>
+		        {{ form_widget(formRecipe.name) }}
+		      </div>
+		    </div>  
+			<div class="form-group text-center">
+		      {{ form_label(formRecipe.time, "Durée", {'label_attr': {'class': ''}}) }}
+		      {{ form_errors(formRecipe.time) }}
+		      <div>
+		        {{ form_widget(formRecipe.time) }}
+		      </div>
+		    </div>
+		    <div class="form-group text-center">
+		      {{ form_label(formRecipe.person_number, "Nombre de personne", {'label_attr': {'class': ''}}) }}
+		      {{ form_errors(formRecipe.person_number) }}
+		      <div>
+		        {{ form_widget(formRecipe.person_number) }}
+		      </div>
+		    </div>
+		    <div class="form-group text-center">
+		      {{ form_label(formRecipe.type, "Type", {'label_attr': {'class': ''}}) }}
+		      {{ form_errors(formRecipe.type) }}
+		      <div>
+		        {{ form_widget(formRecipe.type) }}
+		      </div>
+		    </div>
+		    <div class="form-group text-center">
+		      {{ form_label(formRecipe.difficult, "Difficulté", {'label_attr': {'class': ''}}) }}
+		      {{ form_errors(formRecipe.difficult) }}
+		      <div>
+		        {{ form_widget(formRecipe.difficult) }}
+		      </div>
+		    </div>
+		    <div class="form-group text-center">
+		      {{ form_label(formRecipe.description, "Description", {'label_attr': {'class': ''}}) }}
+		      {{ form_errors(formRecipe.description) }}
+		      <div>
+		        {{ form_widget(formRecipe.description) }}
+		      </div>
+		    </div>
+		</div> 
+	</div>
+	<div class="sm-content-container">
+		<div class="basic-container">	   
+		    <div class="form-group text-center form-input-file-container">		      
+		      {{ form_errors(formRecipe.picture) }}
+		      <div class="input-file-container"> 
+		        {{ form_widget(formRecipe.picture.file, {'attr': {'class': 'input-file', 'accept':'image/*'}})}}
+		        <a href="" class="input-file-trigger">Image</a>
+		      </div> 
+		      <br>
+		      <img class="recipe-picture" src="" width="200" style="display:none;" />   
+		    </div>
+		</div>
+	</div>
+	<div class="sm-content-container">
+		<div class="basic-container">	   
+		    <div class="form-group text-center">		      
+		      {{ form_errors(formRecipe.video) }}
+		      <div class="input-video-container"> 
+		        {{ form_widget(formRecipe.video.url, {'attr': {'class': 'input-video'}})}}
+		        <a href="" class="input-video-trigger">+ Lien video</a>
+		      </div> 
+		      <iframe class="embed" width="560" height="314" src="" frameborder="0" allowfullscreen></iframe>    
+		    </div>
+		</div>
+	</div>
+	<div class="last-content-container">
+		<div class="basic-container">	    
+		    <div class="form-group">
+		      <div class="text-center">
+		      	{{ form_label(formRecipe.operations, "Recette", {'label_attr': {'class': ''}}) }}
+		      </div>
+		      {{ form_errors(formRecipe.operations) }}
+		      <div class="">  
+		        {{ form_widget(formRecipe.operations) }}
+		      </div>     
+		    </div>		  	
+			<div class="form-group text-center">   
+			  {{ form_widget(formRecipe.save, {'attr': {'class': 'btn btn-primary'}, 'label': 'Ajouter'}) }}
+			</div>
+		</div>
+	</div>
+	{{ form_rest(formRecipe) }}
+	{{ form_end(formRecipe) }}
+
+	<script type="text/javascript">
+        $('.parent-collection').collection({
+            min: 1,
+            max: 30,
+            up: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span></a>',
+            down: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-down"></span></a>',
+            add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Operation</a>',
+            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Operation</a>',
+            duplicate: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-th-large"></span> Duplicate collection</a>',
+            prefix: 'parent',
+            allow_duplicate: false,
+            drag_drop: false,
+            children: [{
+            	min: 1,
+                max: 5,
+                selector: '.child-collection',
+                add: '<a href="#" class="btn btn-default">Add</span></a>',
+                remove: '<a href="#" class="btn btn-default">Delete</span></a>',
+                duplicate: '<a href="#" class="btn btn-default">Duplicate</span></a>',
+                allow_duplicate: false,
+                allow_up: false,
+                allow_down: false,
+                drag_drop: false,                
+            }]
+        });
+
+        document.querySelector("html").classList.add('js');
+
+        var fileInput  = document.querySelector( ".input-file" ),  
+            button     = document.querySelector( ".input-file-trigger" );
+        	
+              
+        button.addEventListener( "keydown", function( event ) {  
+            if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+                fileInput.focus();  
+            }  
+        });
+        
+        button.addEventListener( "click", function( event ) {
+           fileInput.focus();
+           return false;
+        }); 
+
+        $( ".input-video-trigger" ).keydown(function( event ) {  
+	        if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+	        	$( ".input-video" ).css('display','inline-block');  
+	        }  
+	    });
+	    
+        $( ".input-video-trigger" ).click(function() {
+        	$( ".input-video-trigger" ).css('display','none');
+			$( ".input-video" ).css('display','inline-block').focus();
+			
+	        return false;
+	    }); 
+
+        $( ".input-video" ).focusout(function() {
+            if($( ".input-video" ).val() == ""){
+	        	$( ".input-video" ).css('display','none');
+	        	$( ".input-video-trigger" ).css('display','inline-block');        	
+        	}
+            else if($( ".input-video" ).val().replace(' ','').substring(0, 32) == 'https://www.youtube.com/watch?v='){
+        		var embed = $( ".input-video" ).val().replace('watch?v=','embed/'); $( ".input-video" ).val(embed); 
+	        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+        	}
+            else if($( ".input-video" ).val().replace(' ','').substring(0, 17) == 'https://youtu.be/'){
+        		var embed = $( ".input-video" ).val().replace('https://youtu.be','https://www.youtube.com/embed'); $( ".input-video" ).val(embed); 
+	        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+        	}
+        	
+        	else if($( ".input-video" ).val().replace(' ','').substring(0, 33) == 'http://www.dailymotion.com/video/'){
+        		var embed = $( ".input-video" ).val().replace('http://www.dailymotion.com','//www.dailymotion.com/embed'); $( ".input-video" ).val(embed); 
+	        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+        	}
+
+        	else if($( ".input-video" ).val().replace(' ','').substring(0, 14) == 'http://dai.ly/'){
+        		var embed = $( ".input-video" ).val().replace('http://dai.ly','//www.dailymotion.com/embed/video'); $( ".input-video" ).val(embed); 
+	        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+        	}
+
+        	else if($( ".input-video" ).val().replace(' ','').substring(0, 18) == 'https://vimeo.com/'){
+        		var embed = $( ".input-video" ).val().replace('https://vimeo.com/','https://player.vimeo.com/video/'); $( ".input-video" ).val(embed); 
+	        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+        	}
+
+        	else if($( ".input-video" ).val().replace(' ','').substring(0, 24) == 'https://rutube.ru/video/'){
+        		var embed = $( ".input-video" ).val().replace('https://rutube.ru/video/','//rutube.ru/play/embed/'); $( ".input-video" ).val(embed); 
+	        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+        	}
+       	
+            return false;
+        });   
+
+        $( ".input-video" ).keydown(function( event ) { 
+        	if ( event.keyCode == 13 || event.keyCode == 32 ) {
+        		event.preventDefault();
+            	if($( ".input-video" ).val().replace(' ','').substring(0, 32) == 'https://www.youtube.com/watch?v='){
+	        		var embed = $( ".input-video" ).val().replace('watch?v=','embed/'); $( ".input-video" ).val(embed); 
+		        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+            	}
+            	else if($( ".input-video" ).val().replace(' ','').substring(0, 17) == 'https://youtu.be/'){
+	        		var embed = $( ".input-video" ).val().replace('https://youtu.be','https://www.youtube.com/embed'); $( ".input-video" ).val(embed); 
+		        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+            	}           	
+            	else if($( ".input-video" ).val().replace(' ','').substring(0, 33) == 'http://www.dailymotion.com/video/'){
+	        		var embed = $( ".input-video" ).val().replace('http://www.dailymotion.com','//www.dailymotion.com/embed'); $( ".input-video" ).val(embed); 
+		        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+            	}
+            	else if($( ".input-video" ).val().replace(' ','').substring(0, 14) == 'http://dai.ly/'){
+	        		var embed = $( ".input-video" ).val().replace('http://dai.ly','//www.dailymotion.com/embed/video'); $( ".input-video" ).val(embed); 
+		        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+            	}
+            	else if($( ".input-video" ).val().replace(' ','').substring(0, 18) == 'https://vimeo.com/'){
+	        		var embed = $( ".input-video" ).val().replace('https://vimeo.com/','https://player.vimeo.com/video/'); $( ".input-video" ).val(embed); 
+		        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+            	}
+            	else if($( ".input-video" ).val().replace(' ','').substring(0, 24) == 'https://rutube.ru/video/'){
+	        		var embed = $( ".input-video" ).val().replace('https://rutube.ru/video/','//rutube.ru/play/embed/'); $( ".input-video" ).val(embed); 
+		        	$( ".embed" ).fadeIn("fast").attr('src',embed);
+            	}
+	        }
+        	else{$( ".embed" ).css("display","none");} 
+	    }); 
+	    
+        $('.input-file').change( function(event) {
+            if(event.target.files[0] != null){
+        		var tmppath = URL.createObjectURL(event.target.files[0]);
+        		$(".recipe-picture").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+            }	
+            else{$(".recipe-picture").css("display","none");}    
+
+        });
+
+        $(".input-file-trigger").click(function(){
+			$(this).parent().children('.input-file').click();
+			return false;
+	    });
+
+        for (var i = 0 ; i < $(':input.select').length ; i++) {		    			    
+    		$select = $('#'+$(':input.select')[i].id+''); 
+    		$select.val($select.val()).change();	   				      
+		}
+
+    </script>
